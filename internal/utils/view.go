@@ -4,20 +4,19 @@ import (
 	"bytes"
 	"github.com/spf13/viper"
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
+	"shina/internal/site"
 )
 
-type HTMLData struct {
-	CSRFToken string
-	Path      string
-}
+func RenderHTML(w http.ResponseWriter, r *http.Request, page string, data *site.HTMLData) {
 
-func RenderHTML(w http.ResponseWriter, r *http.Request, page string, data *HTMLData) {
+	log.Println(viper.GetString("site.HTMLDir"))
 
 	files := []string{
 		filepath.Join(viper.GetString("site.HTMLDir"), "base.html"),
-		filepath.Join(viper.GetString("site.HTMLDir"), page),
+		filepath.Join(viper.GetString("site.HTMLDir"), page+".page.html"),
 	}
 
 	ts, err := template.New("").ParseFiles(files...)

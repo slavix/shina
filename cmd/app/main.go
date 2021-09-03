@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"shina/internal/site"
+	"shina/internal/utils"
 	"shina/pkg/config"
 )
 
@@ -12,8 +14,8 @@ func main() {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	http.HandleFunc("/hello", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, "hello world\n")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		utils.RenderHTML(w, r, "home", &site.HTMLData{})
 	})
 
 	fmt.Println("Server listening!")

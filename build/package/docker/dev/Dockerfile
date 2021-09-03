@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./ /app
 
-RUN go mod download -x
+RUN go mod download
 
 RUN go install github.com/githubnemo/CompileDaemon@latest
 
