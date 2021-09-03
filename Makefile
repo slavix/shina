@@ -13,5 +13,8 @@ up-web-dev:
 down-web-dev:
 	@docker-compose  -f $(composeDevFile) down
 
+web-dev-enter:
+	@docker exec -it --user www-data shina_web_1 bash
+
 run:
 	@go run cmd/app/main.go
