@@ -1,9 +1,12 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+	"github.com/ztrue/tracerr"
+)
 
 func InitConfig() error {
 	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
-	return viper.ReadInConfig()
+	return tracerr.Wrap(viper.ReadInConfig())
 }
