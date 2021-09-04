@@ -1,3 +1,6 @@
 # Site
 site:
   HTMLDir: './website/templates/'
+
+graylog:
+  port: '12201'
