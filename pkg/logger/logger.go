@@ -29,7 +29,6 @@ func Init(serviceName string, level logrus.Level) *logrus.Logger {
 }
 
 func Panic(err error, msg string) {
-	fmt.Println(funcName())
 	logger.WithFields(logrus.Fields{
 		"function": funcName(),
 		"error":    err.Error(),
@@ -55,27 +54,27 @@ func Warn(ctx context.Context, err error, msg string) {
 	}).Warn(msg)
 }
 
-func Info(ctx context.Context, msg string, additionalInfo string) {
+func Info(ctx context.Context, msg string) {
 	logger.WithFields(logrus.Fields{
 		"requestID": GetRequestID(ctx),
 		"function":  funcName(),
-		"info":      additionalInfo,
+		"message":   msg,
 	}).Info(msg)
 }
 
-func Debug(ctx context.Context, msg string, additionalInfo string) {
+func Debug(ctx context.Context, msg string) {
 	logger.WithFields(logrus.Fields{
 		"requestID": GetRequestID(ctx),
 		"function":  funcName(),
-		"debugInfo": additionalInfo,
+		"message":   msg,
 	}).Debug(msg)
 }
 
-func Trace(ctx context.Context, msg string, additionalInfo string) {
+func Trace(ctx context.Context, msg string) {
 	logger.WithFields(logrus.Fields{
 		"requestID": GetRequestID(ctx),
 		"function":  funcName(),
-		"traceInfo": additionalInfo,
+		"message":   msg,
 	}).Trace(msg)
 }
 

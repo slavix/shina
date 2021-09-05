@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"github.com/joho/godotenv"
-	"log"
-	"net/http"
-	"shina/internal/site"
-	"shina/internal/utils"
+	"github.com/spf13/viper"
+	"github.com/ztrue/tracerr"
+	"os"
+	"os/signal"
+	"shina/internal/handlers"
+	"shina/internal/server"
 	"shina/pkg/config"
 	"shina/pkg/logger"
+	"syscall"
 )
 
 func main() {
@@ -22,11 +27,30 @@ func main() {
 		logger.Panic(err, "error loading env variables")
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		utils.RenderHTML(w, r, "home", &site.HTMLData{})
-	})
+	handler := handlers.NewHandler()
 
-	fmt.Println("Server listening!")
+	srv := new(server.Server)
+	go func() {
+		if err := srv.Run(viper.GetString("site.port"), handler.InitRoutes()); err != nil {
+			logger.Panic(err, "error occured while running http server")
+		}
+	}()
 
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	fmt.Println("Server listening at port " + viper.GetString("site.port"))
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	if err := shutdown(srv); err != nil {
+		logger.Panic(err, "shutdown failed")
+	}
+}
+
+func shutdown(server *server.Server) error {
+	if err := server.Shutdown(context.Background()); err != nil {
+		return tracerr.Wrap(errors.New("http server doesn't close connection"))
+	}
+
+	return nil
 }

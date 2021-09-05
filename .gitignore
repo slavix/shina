@@ -2,3 +2,5 @@
 /tls
 
 web
+.env
+.data
