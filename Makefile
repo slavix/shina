@@ -13,7 +13,7 @@ up-web-dev:
 down-web-dev:
 	@docker-compose  -f $(composeDevFile) down
 
-web-dev-enter:
+enter-web-dev:
 	@docker exec -it --user www-data shina_web_1 bash
 
 run:

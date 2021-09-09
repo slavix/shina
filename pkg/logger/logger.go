@@ -6,9 +6,9 @@ import (
 	formatter "github.com/fabienm/go-logrus-formatters"
 	graylog "github.com/gemnasium/logrus-graylog-hook/v3"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/ztrue/tracerr"
 	"runtime"
+	"shina/pkg/config"
 )
 
 var logger *logrus.Logger
@@ -20,7 +20,7 @@ func Init(serviceName string, level logrus.Level) *logrus.Logger {
 	gelfFmt := formatter.NewGelf(serviceName)
 	logrusLogger.SetFormatter(gelfFmt)
 
-	hook := graylog.NewGraylogHook(":"+viper.GetString("graylog.port"), map[string]interface{}{})
+	hook := graylog.NewGraylogHook(":"+config.GetString("graylog.port"), map[string]interface{}{})
 	logrusLogger.AddHook(hook)
 
 	logger = logrusLogger

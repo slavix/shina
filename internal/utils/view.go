@@ -2,21 +2,17 @@ package utils
 
 import (
 	"bytes"
-	"github.com/spf13/viper"
 	"html/template"
-	"log"
 	"net/http"
 	"path/filepath"
 	"shina/internal/site"
+	"shina/pkg/config"
 )
 
 func RenderHTML(w http.ResponseWriter, r *http.Request, page string, data *site.HTMLData) {
-
-	log.Println(viper.GetString("site.HTMLDir"))
-
 	files := []string{
-		filepath.Join(viper.GetString("site.HTMLDir"), "base.html"),
-		filepath.Join(viper.GetString("site.HTMLDir"), page+".page.html"),
+		filepath.Join(config.GetString("site.HTMLDir"), "base.html"),
+		filepath.Join(config.GetString("site.HTMLDir"), page+".page.html"),
 	}
 
 	ts, err := template.New("").ParseFiles(files...)

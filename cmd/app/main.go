@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
 	"github.com/ztrue/tracerr"
 	"os"
 	"os/signal"
@@ -31,12 +30,12 @@ func main() {
 
 	srv := new(server.Server)
 	go func() {
-		if err := srv.Run(viper.GetString("site.port"), handler.InitRoutes()); err != nil {
+		if err := srv.Run(config.GetString("site.port"), handler.InitRoutes()); err != nil {
 			logger.Panic(err, "error occured while running http server")
 		}
 	}()
 
-	fmt.Println("Server listening at port " + viper.GetString("site.port"))
+	fmt.Println("Server listening at port " + config.GetString("site.port"))
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
