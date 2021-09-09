@@ -10,3 +10,7 @@ func InitConfig() error {
 	viper.SetConfigName("config")
 	return tracerr.Wrap(viper.ReadInConfig())
 }
+
+func GetString(name string) string {
+	return viper.GetString(name)
+}
