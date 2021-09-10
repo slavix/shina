@@ -5,10 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/ztrue/tracerr"
 	"os"
 	"os/signal"
 	"shina/internal/handlers"
+	"shina/internal/repository"
 	"shina/internal/server"
 	"shina/pkg/config"
 	"shina/pkg/logger"
@@ -25,6 +28,20 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		logger.Panic(err, "error loading env variables")
 	}
+
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		Username: os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   os.Getenv("DB_NAME"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
+	})
+	if err != nil {
+		logrus.Fatalf("failed to initialize db: %s", err.Error())
+	}
+
+	fmt.Println(db)
 
 	handler := handlers.NewHandler()
 
