@@ -4,7 +4,20 @@ services:
     build:
       context: .
       dockerfile: ./build/package/docker/dev/Dockerfile
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
     ports:
       - '3000:3000'
     volumes:
       - ./:/app
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.data/database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '5432:5432'
