@@ -47,12 +47,12 @@ func main() {
 
 	srv := new(server.Server)
 	go func() {
-		if err := srv.Run(config.GetString("site.port"), handler.InitRoutes()); err != nil {
+		if err := srv.Run(os.Getenv("APP_PORT"), handler.InitRoutes()); err != nil {
 			logger.Panic(err, "error occured while running http server")
 		}
 	}()
 
-	fmt.Println("Server listening at port " + config.GetString("site.port"))
+	fmt.Println("Server listening at port " + os.Getenv("APP_PORT"))
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)

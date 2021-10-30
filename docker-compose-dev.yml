@@ -1,17 +1,22 @@
 version: "3"
 services:
   web:
+    container_name: ${APP_NAME}
     build:
       context: .
       dockerfile: ./build/package/docker/dev/Dockerfile
+      args:
+        - DEV_USER_ID=${DEV_USER_ID}
+        - DEV_USER_GROUP_ID=${DEV_USER_GROUP_ID}
     environment:
       - POSTGRES_HOST=${DB_HOST}
     ports:
-      - '3000:3000'
+      - ${APP_PORT}:${APP_PORT}
     volumes:
       - ./:/app
 
   postgres:
+    container_name: ${DB_HOST}
     restart: always
     image: postgres:latest
     volumes:
