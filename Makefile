@@ -1,20 +1,25 @@
 
 composeDevFile = docker-compose-dev.yml
 
-build-web-dev:
+init:
+	@cp .env-example .env
+
+-include .env
+
+build-dev:
 	@docker-compose -f $(composeDevFile) build
 
-build-web-dev-no-cache:
+build-dev-no-cache:
 	@docker-compose  -f $(composeDevFile) build --no-cache
 
-up-web-dev:
+up:
 	@docker-compose  -f $(composeDevFile) up -d
 
-down-web-dev:
+down:
 	@docker-compose  -f $(composeDevFile) down
 
-enter-web-dev:
-	@docker exec -it --user www-data shina_web_1 bash
+enter:
+	@docker exec -it --user www-data $(APP_NAME) bash
 
 run:
 	@go run cmd/app/main.go
